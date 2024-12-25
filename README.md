@@ -1,0 +1,8 @@
+- [x] There are 5 offices in the building.
+- [x] The requirement to create a booking system without using frameworks
+- [] The notification system for bookings (via Email and phone number) 
+- [] Handling occupied offices
+- [] Using a database management system
+- [] Following PEP standards
+- [] Using Git and GitHub with meaningful commits
+- [] Submitting the result as a GitHub link, not as compressed files
