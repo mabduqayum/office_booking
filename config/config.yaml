@@ -1,0 +1,23 @@
+development:
+  database:
+    host: localhost
+    port: 5435
+    name: db
+    user: user
+    password: pass
+
+production:
+  database:
+    host: prod.host.com
+    port: 5435
+    name: db
+    user: user
+    password: pass
+
+test:
+  database:
+    host: localhost
+    port: 5435
+    name: db
+    user: user
+    password: pass

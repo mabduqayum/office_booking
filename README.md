@@ -1,8 +1,18 @@
-- [x] There are 5 offices in the building.
-- [x] The requirement to create a booking system without using frameworks
-- [] The notification system for bookings (via Email and phone number) 
-- [] Handling occupied offices
-- [] Using a database management system
-- [] Following PEP standards
-- [] Using Git and GitHub with meaningful commits
-- [] Submitting the result as a GitHub link, not as compressed files
+# Office Booking System
+
+## Setup
+1. Clone the repository.
+2. To start the PostgreSQL database run:
+    ```sh
+    docker-compose up
+    ```
+3. To apply database migrations run:
+    ```sh
+    python ./migrations/migrate.py
+    ```
+
+## Usage
+Run `python main.py` to start the CLI.
+
+## Testing
+Run `python -m unittest discover tests` to run all unit tests.

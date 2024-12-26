@@ -2,7 +2,8 @@ from datetime import datetime
 import sys
 from dataclasses import dataclass
 
-from src.utils.constants import DATETIME_FORMAT, Messages
+from config.config import DatabaseConfig
+from src.utils.constants import DATETIME_FORMAT
 from src.models.models import BookingRequest
 from src.services.booking import OfficeBookingSystem
 from src.repositories.database import Database
@@ -21,8 +22,9 @@ class UserInput:
 
 
 class BookingSystemCLI:
-    def __init__(self):
-        self.database = Database()
+    def __init__(self, db_config: DatabaseConfig):
+        self.db_config = db_config
+        self.database = Database(self.db_config)
         self.notification_manager = NotificationManager(
             email_service=EmailService(),
             sms_service=SMSService()
@@ -77,8 +79,8 @@ class BookingSystemCLI:
             user_phone=user_input.user_phone
         )
 
-        status = self.booking_system.book_office(booking_request)
-        print(Messages.get_booking_message(status))
+        result = self.booking_system.book_office(booking_request)
+        print(result)
 
     @staticmethod
     def handle_exit():

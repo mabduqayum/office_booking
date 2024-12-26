@@ -1,11 +1,13 @@
 import sys
 
+from config.config import DatabaseConfig
 from src.cmd.cli import BookingSystemCLI
 
 
 def main() -> None:
     try:
-        cli = BookingSystemCLI()
+        db_config = DatabaseConfig.from_yaml()
+        cli = BookingSystemCLI(db_config)
         cli.run()
     except Exception as e:
         print(f"Fatal error: {e}")

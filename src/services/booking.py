@@ -1,5 +1,5 @@
 from datetime import datetime
-from src.utils.constants import MAX_OFFICE_NUMBER, BookingStatus, Messages
+from src.utils.constants import MAX_OFFICE_NUMBER, Messages
 from src.models.models import BookingRequest
 from src.repositories.database import Database
 from src.services.notification import NotificationManager
@@ -17,7 +17,7 @@ class OfficeBookingSystem:
         if self.db.is_office_available(office_number, start_time, end_time):
             return Messages.AVAILABLE.format(office_number)
 
-        occupancy = self.db.get_office_occupancy(office_number, start_time)
+        occupancy = self.db.get_office_occupancy(office_number, start_time, end_time)
         if occupancy:
             return Messages.OCCUPIED.format(
                 office_number,
@@ -27,22 +27,26 @@ class OfficeBookingSystem:
             )
         return Messages.UNAVAILABLE
 
-    def book_office(self, booking_request: BookingRequest) -> BookingStatus:
+    def book_office(self, booking_request: BookingRequest) -> str:
         if not self.is_valid_office_number(booking_request.office_number):
-            return BookingStatus.INVALID_OFFICE
+            return Messages.INVALID_OFFICE
 
-        if not self.db.is_office_available(
-            booking_request.office_number,
-            booking_request.start_time,
-            booking_request.end_time
-        ):
-            return BookingStatus.UNAVAILABLE
+        occupancy = self.db.get_office_occupancy(booking_request.office_number,
+                                                 booking_request.start_time,
+                                                 booking_request.end_time)
+        if occupancy:
+            return Messages.OCCUPIED.format(
+                booking_request.office_number,
+                occupancy.user_name,
+                occupancy.start_time,
+                occupancy.end_time
+            )
 
         with self.db.transaction():
             self.db.book_office(booking_request)
             self.notification_manager.send_booking_confirmation(booking_request)
 
-        return BookingStatus.SUCCESS
+        return Messages.BOOKING_SUCCESS.format(booking_request.office_number)
 
     @staticmethod
     def is_valid_office_number(office_number: int) -> bool:
